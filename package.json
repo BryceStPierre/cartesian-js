@@ -1,0 +1,31 @@
+{
+  "name": "cartesian-js",
+  "version": "1.0.0",
+  "description": "A set of graphics classes based on classic mathematics, written in JavaScript and designed for reuse.",
+  "main": "app.js",
+  "scripts": {
+    "start": "webpack && start http://localhost:8080 && node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BryceStPierre/cartesian-js.git"
+  },
+  "keywords": [
+    "cartesian"
+  ],
+  "author": "Bryce St. Pierre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BryceStPierre/cartesian-js/issues"
+  },
+  "homepage": "https://github.com/BryceStPierre/cartesian-js#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.8.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
