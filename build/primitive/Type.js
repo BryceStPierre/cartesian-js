@@ -1,22 +1,57 @@
 export default class Type
 {
     static isNumber (v) {
-        return Number.isFinite(v) && !isNaN(v) && !this.isString(v); 
+        try {
+            if (Number.isFinite(v) && !isNaN(v) && typeof v !== 'string')
+                return true;
+            else
+                throw 'NonNumberError';
+        } catch (err) {
+            console.log(err);
+        }
     }
     
     static isString (v) {
-        return typeof v === 'string';
+        try {
+            if (typeof v === 'string')
+                return true;
+            else
+                throw 'NonStringError';
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     static isArray (v) {
-        return Array.isArray(v);
+        try {
+            if (Array.isArray(v))
+                return true;
+            else
+                throw 'NonArrayError';
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     static isObject (v) {
-        return typeof v === 'object' && v !== null;
+        try {
+            if (typeof v === 'object' && v !== null)
+                return true;
+            else
+                throw 'NonObjectError';
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     static isNull (v) {
-        return v === null;
+        try {
+            if (v === null || !v)
+                return true;
+            else
+                throw 'NonNullError';
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
