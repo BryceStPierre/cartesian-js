@@ -22,25 +22,37 @@ export default class Point
         }
     }
 
-    //
-    add (x, y) {
-        this._x += x;
-        this._y += y;
+    add (...p) {
+        if (p.length === 1 && Type.isObject(p[0])) {
+            this._x += p[0].x;
+            this._y += p[0].y;
+        } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
+            this._x += p[0];
+            this._y += p[1];
+        }
+        try {
+            throw new Error('PointAddFailure');
+        } catch (e) {
+            console.log(e.stack);
+        }
     }
 
-    // Multiply (c).
-    // Multiply (c1, c2).
     multiply (...p) {
-        if (p.length === 1) {
+        if (p.length === 1 && Type.isNumber(p[0])) {
             this._x *= p[0];
             this._y *= p[0];
-        } else if (p.length === 2) {
+        } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
             this._x *= p[0];
             this._y *= p[1];
         }
+        try {
+            throw new Error('PointMultiplyFailure');
+        } catch (e) {
+            console.log(e.stack);
+        }
     }
     
-    get json () { 
+    get json () {
         return {
             x: this._x,
             y: this._y
