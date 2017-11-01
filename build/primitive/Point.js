@@ -3,52 +3,73 @@ import Type from './Type';
 export default class Point
 {
     constructor (...p) {
-        // Array: [x, y].
-        if (p.length === 1 && Type.isArray(p[0])) {
-            this._x = p[0][0];
-            this._y = p[0][1];
-        } // Object: { x: n, y: n }.
-        else if (p.length === 1 && Type.isObject(p[0])) {
-            this._x = p[0].x;
-            this._y = p[0].y;
-        } // Numbers: a, b.
-        else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
-            this._x = p[0];
-            this._y = p[1];
-        } // Default.
-        else {
-            this._x = 0;
-            this._y = 0;
+        try {
+            // Default.
+            if (p.length === 0) {
+                this._x = 0;
+                this._y = 0;
+            } // Array: [x, y].
+            else if (p.length === 1 && Type.isArray(p[0])) {
+                this._x = p[0][0];
+                this._y = p[0][1];
+            } // Object: { x: n, y: n }.
+            else if (p.length === 1 && Type.isObject(p[0])) {
+                this._x = p[0].x;
+                this._y = p[0].y;
+            } // Numbers: a, b.
+            else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
+                this._x = p[0];
+                this._y = p[1];
+            } // Default.
+            else 
+                throw new Error('PointConstructFailure');
+        } catch (e) {
+            console.error(e.stack);
         }
     }
 
     add (...p) {
-        if (p.length === 1 && Type.isObject(p[0])) {
-            this._x += p[0].x;
-            this._y += p[0].y;
-        } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
-            this._x += p[0];
-            this._y += p[1];
-        }
         try {
-            throw new Error('PointAddFailure');
+            if (p.length === 1 && Type.isObject(p[0])) {
+                this._x += p[0].x;
+                this._y += p[0].y;
+            } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
+                this._x += p[0];
+                this._y += p[1];
+            } else
+                throw new Error('PointAddFailure');
         } catch (e) {
-            console.log(e.stack);
+            console.error(e.stack);
         }
     }
 
     multiply (...p) {
-        if (p.length === 1 && Type.isNumber(p[0])) {
-            this._x *= p[0];
-            this._y *= p[0];
-        } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
-            this._x *= p[0];
-            this._y *= p[1];
-        }
         try {
-            throw new Error('PointMultiplyFailure');
+            if (p.length === 1 && Type.isNumber(p[0])) {
+                this._x *= p[0];
+                this._y *= p[0];
+            } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
+                this._x *= p[0];
+                this._y *= p[1];
+            } else 
+                throw new Error('PointMultiplyFailure');
         } catch (e) {
-            console.log(e.stack);
+            console.error(e.stack);
+        }
+    }
+
+    // rotate () { }
+
+    isNear (point, threshold) {
+        try {
+            if (Type.isObject(point) && Type.isNumber(threshold)) {
+                return Math.sqrt(
+                    ((this._x - point.x) ** 2) + ((this._x - point.y) ** 2)
+                ) < threshold;
+            } else
+                throw new Error('PointIsNearFailure');
+        } catch (e) {
+            console.error(e.stack);
         }
     }
     
