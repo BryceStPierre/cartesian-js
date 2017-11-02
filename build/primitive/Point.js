@@ -22,7 +22,7 @@ export default class Point
                 this._y = p[1];
             } // Default.
             else 
-                throw new Error('PointConstructFailure');
+                throw new Error('PointConstructError');
         } catch (e) {
             console.error(e.stack);
         }
@@ -37,7 +37,7 @@ export default class Point
                 this._x += p[0];
                 this._y += p[1];
             } else
-                throw new Error('PointAddFailure');
+                throw new Error('PointAddError');
         } catch (e) {
             console.error(e.stack);
         }
@@ -52,7 +52,7 @@ export default class Point
                 this._x *= p[0];
                 this._y *= p[1];
             } else 
-                throw new Error('PointMultiplyFailure');
+                throw new Error('PointMultiplyError');
         } catch (e) {
             console.error(e.stack);
         }
@@ -67,7 +67,7 @@ export default class Point
                     ((this._x - point.x) ** 2) + ((this._x - point.y) ** 2)
                 ) < threshold;
             } else
-                throw new Error('PointIsNearFailure');
+                throw new Error('PointIsNearError');
         } catch (e) {
             console.error(e.stack);
         }

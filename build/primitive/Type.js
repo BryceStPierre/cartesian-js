@@ -8,6 +8,10 @@ export default class Type
         return typeof v === 'string';
     }
 
+    static isBoolean (v) {
+        return typeof v === 'boolean';
+    }
+
     static isArray (v) {
         return Array.isArray(v);
     }
