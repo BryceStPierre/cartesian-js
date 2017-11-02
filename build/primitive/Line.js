@@ -61,6 +61,9 @@ export default class Line
     }
 
     atY (y) {
+        if (this._xInt)
+
+
         return new Point(this.solveX(y), y);
     }
 }
