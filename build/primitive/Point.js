@@ -39,10 +39,10 @@ export default class Point
         } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
             this._x *= p[0];
             this._y *= p[1];
-        } 
+        }
     }
     
-    get json () {
+    asJSON () {
         return {
             x: this._x,
             y: this._y

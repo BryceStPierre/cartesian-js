@@ -1,9 +1,9 @@
 export default class Type
 {
     static isNumber (v) {
-        return Number.isFinite(v) && !isNaN(v) && typeof v !== 'string';
+        return typeof v === 'number';
     }
-    
+
     static isString (v) {
         return typeof v === 'string';
     }
