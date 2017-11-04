@@ -14,7 +14,7 @@ export default class Polygon
             this._points = p[0];
         // Object: {points}.
         else if (p.length === 1 && Type.isObject(p[0]))
-        this._points = p[0].points.map(p => new Point(p));
+            this._points = p[0].points.map(p => new Point(p));
     }
 
     containsPoint (point) {
@@ -36,17 +36,23 @@ export default class Polygon
     }
 
     boundingBox () {
-        var minX = Math.min(this._points.map(p => p.x));
-        var maxX = Math.max(this._points.map(p => p.x));
-        var minY = Math.min(this._points.map(p => p.y));
-        var maxY = Math.max(this._points.map(p => p.y));
+        var minX = Math.min(...this._points.map(p => p.x));
+        var maxX = Math.max(...this._points.map(p => p.x));
+        var minY = Math.min(...this._points.map(p => p.y));
+        var maxY = Math.max(...this._points.map(p => p.y));
         return new Rectangle(maxX - minX, maxY - minY, new Point(minX, maxY))
+    }
+
+    asGraphic (h) {
+        return {
+            points: this._points.map(p => p.asGraphic(h)).map(p => `${p.x},${p.y}`).join(" ")
+        };
     }
 
     asJSON () {
         return {
             points: this._points.map(p => p.json)
-        }
+        };
     }
 
     get points () { return this._points; }

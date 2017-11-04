@@ -52,7 +52,14 @@ export default class Point
             ((this._x - point.x) ** 2) + ((this._y - point.y) ** 2)
         );
     }
-    
+
+    asGraphic (h) {
+        return {
+            x: this._x,
+            y: h - this._y
+        };
+    }
+
     asJSON () {
         return {
             x: this._x,

@@ -56,11 +56,20 @@ class Rectangle
 
     asPolygon () {
         return new Polygon([
-            this.atCorner(0),
-            this.atCorner(1),
-            this.atCorner(2),
-            this.atCorner(3)
+            this.at(Corner.TOP_LEFT),
+            this.at(Corner.TOP_RIGHT),
+            this.at(Corner.BOTTOM_RIGHT),
+            this.at(Corner.BOTTOM_LEFT)
         ]);
+    }
+
+    asGraphic (h) {
+        return {
+            x: this._corner.asGraphic(h).x,
+            y: this._corner.asGraphic(h).y,
+            width: this._width,
+            height: this._height
+        };
     }
 
     asJSON () {

@@ -55,11 +55,22 @@ export default class Line
         return this.atX((line.yInt - this._yInt) / (this._slope - line.slope));
     }
 
+    asGraphic (x1, x2, h) {
+        var p1 = this.atX(x1).asGraphic(h);
+        var p2 = this.atX(x2).asGraphic(h);
+        return {
+            x1: p1.x.toFixed(2),
+            y1: p1.y.toFixed(2),
+            x2: p2.x.toFixed(2),
+            y2: p2.y.toFixed(2)
+        };
+    }
+
     asJSON () {
         return {
             slope: this._slope,
             yInt: this._yInt
-        }
+        };
     }
 
     get inverse () { return -1 / this._slope; }

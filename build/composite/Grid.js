@@ -5,17 +5,19 @@ import { Corner } from '../primitive/Rectangle';
 export default class Grid 
 {
     constructor (region, spacing) {
-        var box = region.boundingBox();
+        this._box = region.boundingBox();
         
         var sorted = region.points
-            .map(p => { return { point: p, distance: p.distance(box.at(Corner.TOP_LEFT)) }; })
+            .map(p => { 
+                return { point: p, distance: p.distance(this._box.at(Corner.TOP_LEFT)) }; 
+            })
             .sort((a, b) => a.distance - b.distance);
 
         var slope = region.edges
             .filter(e => e.slope > 0)
             .map(e => e.slope)
             .reduce((c, v, i, s) => c + (v / s.length), 0);
-
+            
         var p1 = sorted[0].point;
         var l1 = new Line(slope, p1);
 
@@ -26,7 +28,6 @@ export default class Grid
 
         var p3 = l2.intersect(l3);
         var p4 = p1.rotate(p3);
-
         var l4 = new Line(l1.inverse, p4);
 
         const v = l4.yInt - l3.yInt;
@@ -34,8 +35,8 @@ export default class Grid
         var pSet = [l1];
         var nSet = [l3];
 
-        var l5 = new Line(l1.slope, box.at(Corner.TOP_LEFT));
-        var l6 = new Line(l1.slope, box.at(Corner.BOTTOM_RIGHT));
+        var l5 = new Line(l1.slope, this._box.at(Corner.TOP_LEFT));
+        var l6 = new Line(l1.slope, this._box.at(Corner.BOTTOM_RIGHT));
         var next = l1.yInt + u;
         while (next < l5.yInt) {
             pSet.unshift(new Line(l1.slope, next));
@@ -47,8 +48,8 @@ export default class Grid
             next -= u;
         }
 
-        var l7 = new Line(l1.inverse, box.at(Corner.BOTTOM_LEFT));
-        var l8 = new Line(l1.inverse, box.at(Corner.TOP_RIGHT));
+        var l7 = new Line(l1.inverse, this._box.at(Corner.BOTTOM_LEFT));
+        var l8 = new Line(l1.inverse, this._box.at(Corner.TOP_RIGHT));
         next = l3.yInt - v;
         while (next > l7.yInt) {
             nSet.unshift(new Line(l1.inverse, next));
@@ -61,6 +62,20 @@ export default class Grid
         }
 
         this._lines = pSet.concat(nSet);
+    }
+
+    asGraphic (h) {
+        return {
+            lines: this._lines.map(l => {
+                var v = [
+                    l.atX(this._box.corner.x),
+                    l.atX(this._box.corner.x + this._box.width),
+                    l.atY(this._box.corner.y),
+                    l.atY(this._box.corner.y - this._box.height)
+                ].filter(p => this._box.containsPoint(p));
+                return l.asGraphic(v[0].x, v[1].x, h);
+            })
+        }
     }
 
     get lines () { return this._lines; }
