@@ -9,12 +9,12 @@ export default class Polygon
         // Default.
         if (p.length === 0)
             this._points = [];
-        // Object: {points}.
-        else if (p.length === 1 && Type.isObject(p[0]))
-            this._points = p[0].points.map(p => new Point(p));
         // Array: [].
         else if (p.length === 1 && Type.isArray(p[0]))
             this._points = p[0];
+        // Object: {points}.
+        else if (p.length === 1 && Type.isObject(p[0]))
+        this._points = p[0].points.map(p => new Point(p));
     }
 
     containsPoint (point) {

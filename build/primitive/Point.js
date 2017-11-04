@@ -41,6 +41,17 @@ export default class Point
             this._y *= p[1];
         }
     }
+
+    // Only rotates 90 degrees.
+    rotate (p) {
+        return new Point(this._y + p.x - p.y, (-1 * this._x) + p.x + p.y);
+    }
+
+    distance (point) {
+        return Math.sqrt(
+            ((this._x - point.x) ** 2) + ((this._y - point.y) ** 2)
+        );
+    }
     
     asJSON () {
         return {

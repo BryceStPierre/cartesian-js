@@ -35,7 +35,7 @@ class Rectangle
         }
     }
 
-    atCorner (i) {
+    at (i) {
         var points = [
             this._corner,
             new Point(this._corner.x + this._width, this._corner.y),
