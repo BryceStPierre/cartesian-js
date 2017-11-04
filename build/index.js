@@ -1,8 +1,11 @@
+import * as d3 from 'd3';
+
 import Point from './primitive/Point';
 import Polygon from './primitive/Polygon';
 import Grid from './composite/Grid';
 
-import * as d3 from 'd3';
+const w = 500;
+const h = 400;
 
 var polygon = new Polygon([
     new Point(50, 340),
@@ -18,11 +21,7 @@ var polygon = new Polygon([
 ]);*/
 
 var box = polygon.boundingBox().asGraphic(h);
-
 var grid = new Grid(polygon, 20);
-
-const w = 500;
-const h = 400;
 
 var canvas = d3.select('#canvas')
     .append('svg')
