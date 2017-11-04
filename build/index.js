@@ -10,14 +10,15 @@ var polygon = new Polygon([
     new Point(340, 50),
     new Point(50, 50)
 ]);
-
 /*var polygon = new Polygon([
     new Point(30, 375),
     new Point(300, 360),
     new Point(297, 45),
     new Point(20, 20)
 ]);*/
-var box = polygon.boundingBox();
+
+var box = polygon.boundingBox().asGraphic(h);
+
 var grid = new Grid(polygon, 20);
 
 const w = 500;
@@ -28,13 +29,19 @@ var canvas = d3.select('#canvas')
     .attr('width', w)
     .attr('height', h);
 
-var boxG = box.asGraphic(h);
 canvas.append('rect')
-    .attr('x', boxG.x)
-    .attr('y', boxG.y)
-    .attr('width', boxG.width)
-    .attr('height', boxG.height)
-    .attr('fill', '#EEE')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', w)
+    .attr('height', h)
+    .attr('fill', '#EEE');
+
+canvas.append('rect')
+    .attr('x', box.x)
+    .attr('y', box.y)
+    .attr('width', box.width)
+    .attr('height', box.height)
+    .attr('fill', '#CCC')
 
 canvas.append('polygon')
     .attr('points', polygon.asGraphic(h).points)
@@ -49,5 +56,3 @@ canvas.selectAll('line')
     .attr('x2', d => d.x2)
     .attr('y2', d => d.y2)
     .attr('stroke', 'blue');
-
-console.log(grid.lines);
