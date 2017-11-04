@@ -20,8 +20,15 @@ var polygon = new Polygon([
     new Point(20, 20)
 ]);*/
 
+var con = new Polygon([
+    new Point(80, 120),
+    new Point(220, 140),
+    new Point(220, 50),
+    new Point(45, 25)
+]);
+
 var box = polygon.boundingBox().asGraphic(h);
-var grid = new Grid(polygon, 20);
+var grid = new Grid(polygon, con, 30);
 
 var canvas = d3.select('#canvas')
     .append('svg')
@@ -46,6 +53,11 @@ canvas.append('polygon')
     .attr('points', polygon.asGraphic(h).points)
     .attr('fill', '#AAA');
 
+canvas.append('polygon')
+    .attr('points', con.asGraphic(h).points)
+    .attr('fill', 'purple')
+    .style('fill-opacity', 0.5);
+
 canvas.selectAll('line')
     .data(grid.asGraphic(h).lines)
     .enter()
@@ -55,3 +67,13 @@ canvas.selectAll('line')
     .attr('x2', d => d.x2)
     .attr('y2', d => d.y2)
     .attr('stroke', 'blue');
+
+canvas.selectAll('.unit')
+    .data(grid.asGraphic(h).units)
+    .enter()
+    .append('polygon')
+    .attr('points', d => d.polygon.points)
+    .style('fill-opacity', 0.5)
+    .style('fill', d => {
+        return d.state === 0 ? 'green' : 'red';
+    });

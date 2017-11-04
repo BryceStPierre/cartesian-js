@@ -31,6 +31,10 @@ export default class Polygon
         return contains;
     }
 
+    containsAnyPoint (polygon) {
+        return polygon.points.reduce((a, p) => a || this.containsPoint(p), false);
+    }
+
     containsPolygon (polygon) {
         return polygon.points.reduce((a, p) => a && this.containsPoint(p), true);
     }

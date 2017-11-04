@@ -10,8 +10,8 @@ export default class Line
         // Object: {slope, yInt}.
         if (p.length === 1 && Type.isObject(p[0])) {
             if (p[0].hasOwnProperty('slope') && p[0].hasOwnProperty('yInt')) {
-                this._slope = p[0].slope;
-                this._yInt = p[0].yInt;
+                this._slope = p[0];
+                this._yInt = p[0];
             }
         } // Number, Number: slope, yInt.
         else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
@@ -59,10 +59,10 @@ export default class Line
         var p1 = this.atX(x1).asGraphic(h);
         var p2 = this.atX(x2).asGraphic(h);
         return {
-            x1: p1.x.toFixed(2),
-            y1: p1.y.toFixed(2),
-            x2: p2.x.toFixed(2),
-            y2: p2.y.toFixed(2)
+            x1: p1.x,
+            y1: p1.y,
+            x2: p2.x,
+            y2: p2.y
         };
     }
 
