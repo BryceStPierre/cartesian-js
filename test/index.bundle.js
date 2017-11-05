@@ -2672,10 +2672,6 @@ var Point = function () {
                 }
     }
 
-    // Object: Point.
-    // Number, Number: x, y.
-
-
     _createClass(Point, [{
         key: 'add',
         value: function add() {
@@ -2683,37 +2679,40 @@ var Point = function () {
                 p[_key2] = arguments[_key2];
             }
 
+            // Object: Point.
             if (p.length === 1 && _Type2.default.isObject(p[0])) {
                 this._x += p[0].x;
                 this._y += p[0].y;
-            } else if (p.length === 2 && _Type2.default.isNumber(p[0]) && _Type2.default.isNumber(p[1])) {
-                this._x += p[0];
-                this._y += p[1];
-            }
+            } // Number, Number: x, y.
+            else if (p.length === 2 && _Type2.default.isNumber(p[0]) && _Type2.default.isNumber(p[1])) {
+                    this._x += p[0];
+                    this._y += p[1];
+                }
         }
-
-        // Number: n.
-        // Number, Number: n1, n2.
-
     }, {
         key: 'multiply',
         value: function multiply() {
+            // Number: n.
             if (arguments.length === 1 && _Type2.default.isNumber(arguments.length <= 0 ? undefined : arguments[0])) {
                 this._x *= arguments.length <= 0 ? undefined : arguments[0];
                 this._y *= arguments.length <= 0 ? undefined : arguments[0];
-            } else if (arguments.length === 2 && _Type2.default.isNumber(arguments.length <= 0 ? undefined : arguments[0]) && _Type2.default.isNumber(arguments.length <= 1 ? undefined : arguments[1])) {
-                this._x *= arguments.length <= 0 ? undefined : arguments[0];
-                this._y *= arguments.length <= 1 ? undefined : arguments[1];
-            }
+            } // Number, Number: n1, n2. 
+            else if (arguments.length === 2 && _Type2.default.isNumber(arguments.length <= 0 ? undefined : arguments[0]) && _Type2.default.isNumber(arguments.length <= 1 ? undefined : arguments[1])) {
+                    this._x *= arguments.length <= 0 ? undefined : arguments[0];
+                    this._y *= arguments.length <= 1 ? undefined : arguments[1];
+                }
         }
 
-        // Only rotates 90 degrees.
+        // Object, Number: point, radians.
 
     }, {
         key: 'rotate',
-        value: function rotate(p) {
-            return new Point(this._y + p.x - p.y, -1 * this._x + p.x + p.y);
+        value: function rotate(p, r) {
+            return new Point(p.x + Math.cos(r) * (this._x - p.x) - Math.sin(r) * (this._y - p.y), p.y + Math.sin(r) * (this._x - p.x) + Math.cos(r) * (this._y - p.y));
         }
+
+        // Object: point.
+
     }, {
         key: 'distance',
         value: function distance(point) {
@@ -23528,7 +23527,7 @@ var GridArray = function () {
                 var u = new _Polygon2.default([p[i].intersect(n[j]), p[i + 1].intersect(n[j]), p[i + 1].intersect(n[j + 1]), p[i].intersect(n[j + 1])]);
                 var status = c.reduce(function (a, k) {
                     return a && !k.containsAnyPoint(u);
-                }, r.boundingBox().containsPolygon(u) && r.containsPolygon(u));
+                }, r.containsPolygon(u));
                 if (status) row.push({ state: 0, polygon: u });else row.push({ state: -1, polygon: u });
             }
             this._array.push(row);
@@ -23543,6 +23542,15 @@ var GridArray = function () {
                     return { state: u.state, polygon: u.polygon.asGraphic(h) };
                 }));
             }, []);
+        }
+    }, {
+        key: 'size',
+        get: function get() {
+            return this._array.reduce(function (a, c) {
+                return a.concat(c);
+            }, []).filter(function (u) {
+                return u.state !== -1;
+            }).length;
         }
     }]);
 
@@ -23562,7 +23570,7 @@ var GridData = function () {
         var l3 = new _Line2.default(l1.inverse, p1);
 
         var p3 = l2.intersect(l3);
-        var p4 = p1.rotate(p3);
+        var p4 = p1.rotate(p3, -Math.PI / 2);
         var l4 = new _Line2.default(l1.inverse, p4);
 
         var v = l4.yInt - l3.yInt;
@@ -23619,6 +23627,11 @@ var GridData = function () {
         get: function get() {
             return this._pSet.concat(this._nSet);
         }
+    }, {
+        key: 'size',
+        get: function get() {
+            return this._gridArray.size;
+        }
     }]);
 
     return GridData;
@@ -23656,6 +23669,7 @@ var Grid = function () {
         }).reduce(function (a, v, i, e) {
             return a + v / e.length;
         }, 0);
+
         var slope2 = r.edges.filter(function (e) {
             return e.slope < 0;
         }).map(function (e) {
@@ -23670,10 +23684,12 @@ var Grid = function () {
         }).sort(function (a, b) {
             return a.d - b.d;
         })[0].p;
+        p1.add(s / 2, s / -2); // Shift half a unit for precision.
 
-        p1.add(1, -1); // Shift for precision.
+        var gridData1 = new GridData(r, c, new _Line2.default(slope1, p1), p1, s);
+        var gridData2 = new GridData(r, c, new _Line2.default(slope2, p1), p1, s);
 
-        this._gridData = new GridData(r, c, new _Line2.default(slope1, p1), p1, s);
+        this._gridData = gridData1.size < gridData2.size ? gridData2 : gridData1;
     }
 
     _createClass(Grid, [{

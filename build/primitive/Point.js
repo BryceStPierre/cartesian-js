@@ -18,35 +18,39 @@ export default class Point
         }
     }
 
-    // Object: Point.
-    // Number, Number: x, y.
     add (...p) {
+        // Object: Point.
         if (p.length === 1 && Type.isObject(p[0])) {
             this._x += p[0].x;
             this._y += p[0].y;
-        } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
+        } // Number, Number: x, y.
+        else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
             this._x += p[0];
             this._y += p[1];
         }
     }
 
-    // Number: n.
-    // Number, Number: n1, n2.
     multiply (...p) {
+        // Number: n.
         if (p.length === 1 && Type.isNumber(p[0])) {
             this._x *= p[0];
             this._y *= p[0];
-        } else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
+        } // Number, Number: n1, n2. 
+        else if (p.length === 2 && Type.isNumber(p[0]) && Type.isNumber(p[1])) {
             this._x *= p[0];
             this._y *= p[1];
         }
     }
 
-    // Only rotates 90 degrees.
-    rotate (p) {
-        return new Point(this._y + p.x - p.y, (-1 * this._x) + p.x + p.y);
+    // Object, Number: point, radians.
+    rotate (p, r) {
+        return new Point(
+            p.x + Math.cos(r) * (this._x - p.x) - Math.sin(r) * (this._y - p.y),
+            p.y + Math.sin(r) * (this._x - p.x) + Math.cos(r) * (this._y - p.y)
+        );
     }
 
+    // Object: point.
     distance (point) {
         return Math.sqrt(
             ((this._x - point.x) ** 2) + ((this._y - point.y) ** 2)

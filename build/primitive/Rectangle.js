@@ -56,8 +56,8 @@ class Rectangle
 
     asPolygon () {
         return new Polygon([
-            this.at(Corner.TOP_LEFT),
-            this.at(Corner.TOP_RIGHT),
+            this.at(Corner.TOP_LEFT), 
+            this.at(Corner.TOP_RIGHT), 
             this.at(Corner.BOTTOM_RIGHT),
             this.at(Corner.BOTTOM_LEFT)
         ]);

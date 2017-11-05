@@ -18,7 +18,7 @@ class GridArray {
                 ]);
                 var status = c.reduce((a, k) => {
                     return a && !k.containsAnyPoint(u);
-                }, r.boundingBox().containsPolygon(u) && r.containsPolygon(u));
+                }, r.containsPolygon(u));
                 if (status)
                     row.push({ state: 0, polygon: u });
                 else
@@ -35,6 +35,13 @@ class GridArray {
             }));
         }, []);
     }
+
+    get size () {
+        return this._array
+            .reduce((a, c) => a.concat(c), [])
+            .filter(u => u.state !== -1)
+            .length;
+    }
 }
 
 class GridData
@@ -49,7 +56,7 @@ class GridData
         var l3 = new Line(l1.inverse, p1);
 
         var p3 = l2.intersect(l3);
-        var p4 = p1.rotate(p3);
+        var p4 = p1.rotate(p3, -Math.PI / 2);
         var l4 = new Line(l1.inverse, p4);
 
         const v = l4.yInt - l3.yInt;
@@ -102,6 +109,7 @@ class GridData
     }
 
     get lines () { return this._pSet.concat(this._nSet); }
+    get size () { return this._gridArray.size; }
 }
 
 export default class Grid 
@@ -128,6 +136,7 @@ export default class Grid
             .filter(e => e.slope > 0)
             .map(e => e.slope)
             .reduce((a, v, i, e) => a + (v / e.length), 0);
+
         var slope2 = r.edges
             .filter(e => e.slope < 0)
             .map(e => e.slope)
@@ -139,10 +148,12 @@ export default class Grid
             .sort((a, b) => a.d - b.d)
             [0]
             .p;
+        p1.add(s / 2, s / -2); // Shift half a unit for precision.
+        // ^ This could be used to optimize the number of units.
 
-        p1.add(1, -1); // Shift for precision.
-
-        this._gridData = new GridData(r, c, new Line(slope1, p1), p1, s);
+        var gridData1 = new GridData(r, c, new Line(slope1, p1), p1, s);
+        var gridData2 = new GridData(r, c, new Line(slope2, p1), p1, s);
+        this._gridData = gridData1.size < gridData2.size ? gridData2 : gridData1;
     }
 
     asGraphic (h) {
